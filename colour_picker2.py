@@ -96,7 +96,7 @@ def get_pixel_color_formats(x, y):
         cmyk = (round(c * 100), round(m * 100), round(yellow * 100), round(k * 100))
 
     return {
-        "rgb": (rgb[0], rgb[1], rgb[2]),
+        "rgb": rgb,
         "hsl": (round(hue), round(saturation * 100), round(luminance * 100)),
         "cmyk": cmyk,
     }
