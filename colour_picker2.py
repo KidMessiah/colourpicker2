@@ -55,7 +55,9 @@ def get_pixel_color(x, y):
 # Convert the color to different formats (RGB, HSL, CMYK)
 def get_pixel_color_formats(x, y):
     # Get the RGB values first
+    # This function returns a tuple of 8-bit integers
     rgb = get_pixel_color(x, y)
+    # this converts each value to a float representing a percentage
     r, g, b = [x / 255.0 for x in rgb]
 
     # Calculate HSL it's still off on anything with non-50 luminance idk wtf is going on
@@ -67,9 +69,8 @@ def get_pixel_color_formats(x, y):
     luminance = (max_val + min_val) / 2
 
     # Calculate Saturation
-    saturation = 0
-    if delta != 0:
-        saturation = delta / (1 - abs(2 * luminance - 1))
+    # AP: this is called a 'ternary statement' - it's basically handy shorthand for conditional assignment in one line
+    saturation = 0 if delta == 0 else delta / (1 - abs(2 * luminance - 1))
 
     # Calculate Hue
     hue = 0
