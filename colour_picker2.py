@@ -64,6 +64,14 @@ def get_pixel_color_formats(x, y):
     max_val = max(r, g, b)
     min_val = min(r, g, b)
 
+    return {
+        "rgb": rgb,
+        "hsl": get_pixel_color_hsl(r, g, b, min_val, max_val),
+        "cmyk": get_pixel_color_cmyk(r, g, b, max_val),
+    }
+
+
+def get_pixel_color_cmyk(r, g, b, max_val):
     # Calculate CMYK
     k = 1 - max_val
     if k == 1:
@@ -74,11 +82,7 @@ def get_pixel_color_formats(x, y):
         yellow = (1 - b - k) / (1 - k)
         cmyk = (round(c * 100), round(m * 100), round(yellow * 100), round(k * 100))
 
-    return {
-        "rgb": rgb,
-        "hsl": get_pixel_color_hsl(r, g, b, min_val, max_val),
-        "cmyk": cmyk,
-    }
+    return cmyk
 
 
 def get_pixel_color_hsl(r, g, b, min_val, max_val):
