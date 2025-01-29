@@ -63,6 +63,27 @@ def get_pixel_color_formats(x, y):
     # Calculate HSL it's still off on anything with non-50 luminance idk wtf is going on
     max_val = max(r, g, b)
     min_val = min(r, g, b)
+
+    # Calculate CMYK
+    k = 1 - max_val
+    if k == 1:
+        cmyk = (0, 0, 0, 100)
+    else:
+        c = (1 - r - k) / (1 - k)
+        m = (1 - g - k) / (1 - k)
+        yellow = (1 - b - k) / (1 - k)
+        cmyk = (round(c * 100), round(m * 100), round(yellow * 100), round(k * 100))
+
+    return {
+        "rgb": rgb,
+        "hsl": get_pixel_color_hsl(r, g, b, min_val, max_val),
+        "cmyk": cmyk,
+    }
+
+
+def get_pixel_color_hsl(r, g, b, min_val, max_val):
+    # Calculate HSL it's still off on anything with non-50 luminance idk wtf is going on
+
     delta = max_val - min_val
 
     # Calculate Luminance
@@ -85,21 +106,7 @@ def get_pixel_color_formats(x, y):
         if hue < 0:
             hue += 360
 
-    # Calculate CMYK
-    k = 1 - max_val
-    if k == 1:
-        cmyk = (0, 0, 0, 100)
-    else:
-        c = (1 - r - k) / (1 - k)
-        m = (1 - g - k) / (1 - k)
-        yellow = (1 - b - k) / (1 - k)
-        cmyk = (round(c * 100), round(m * 100), round(yellow * 100), round(k * 100))
-
-    return {
-        "rgb": rgb,
-        "hsl": (round(hue), round(saturation * 100), round(luminance * 100)),
-        "cmyk": cmyk,
-    }
+    return (round(hue), round(saturation * 100), round(luminance * 100))
 
 
 # Convert RGB color to hexadecimal
